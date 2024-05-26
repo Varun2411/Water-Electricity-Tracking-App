@@ -1,0 +1,222 @@
+// import { auth , googleProvider} from "../config/firebase";
+// import { createUserWithEmailAndPassword,signInWithPopup, signOut } from "firebase/auth";
+// import { useState } from "react";
+
+// export const Auth = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//     console.log(auth?.currentUser?.email);
+//     console.log(auth?.currentUser?.photoURL);
+//   const signIn = async () => {
+//     try {
+//     await createUserWithEmailAndPassword(auth, email, password);
+//     } catch (err){
+//       console.error(err);
+//     }
+//   };
+//   const signInWithGoogle = async () => {
+//     try {
+//     await signInWithPopup(auth,googleProvider);
+//     } catch (err){
+//       console.error(err);
+//     }
+//   };
+//   const logOut = async () => {
+//     try {
+//     await signOut(auth);
+//     } catch (err){
+//       console.error(err);
+//     }
+//   };
+//   return (
+//     <div>
+//       <input placeholder="Email.." onChange={(e) => setEmail(e.target.value)} />
+//       <input
+//         type="password"
+//         placeholder="Password.."
+//         onChange={(e) => setPassword(e.target.value)}
+//       />
+//       <button onClick={signIn}> Signin</button>
+//       <button onClick={signInWithGoogle}> Signin with google</button>
+//       <button onClick={logOut}> logOut</button>
+//     </div>
+//   );
+// };
+
+// *************************************
+// import { auth, googleProvider } from "../config/firebase";
+// import { createUserWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+// import { useState } from "react";
+
+// export const Auth = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   console.log(auth?.currentUser?.email);
+//   console.log(auth?.currentUser?.photoURL);
+
+//   const [isAuthenticated, setAuthenticated] = useState(false);
+
+//   const signIn = async () => {
+//     try {
+//       await createUserWithEmailAndPassword(auth, email, password);
+//       setAuthenticated(true); // Set authentication status to true after sign-in
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   const signInWithGoogle = async () => {
+//     try {
+//       await signInWithPopup(auth, googleProvider);
+//       setAuthenticated(true); // Set authentication status to true after sign-in
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   const logOut = async () => {
+//     try {
+//       await signOut(auth);
+//       setAuthenticated(false); // Set authentication status to false after sign-out
+//     } catch (err) {
+//       console.error(err);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       {isAuthenticated ? (
+//         <p>Hello, World!</p>
+//       ) : (
+//         <div>
+//           <input placeholder="Email.." onChange={(e) => setEmail(e.target.value)} />
+//           <input
+//             type="password"
+//             placeholder="Password.."
+//             onChange={(e) => setPassword(e.target.value)}
+//           />
+//           <button onClick={signIn}>Signin</button>
+//           <button onClick={signInWithGoogle}>Signin with Google</button>
+//         </div>
+//       )}
+//       {isAuthenticated && <button onClick={logOut}>Log Out</button>}
+//     </div>
+//   );
+// };
+
+// ************************/
+
+// import { auth, googleProvider,db } from "../config/firebase";
+// import { createUserWithEmailAndPassword, signInWithEmailAndPassword, signInWithPopup, signOut } from "firebase/auth";
+// import { useState,useEffect } from "react";
+// import { collection, addDoc } from 'firebase/firestore';
+// import { getDocs } from 'firebase/firestore';
+
+// const Auth = () => {
+//   const [email, setEmail] = useState("");
+//   const [password, setPassword] = useState("");
+//   const [error, setError] = useState(null);
+//   const [isAuthenticated, setAuthenticated] = useState(false);
+//   const [monthlyData, setMonthlyData] = useState([]);
+
+//   useEffect(() => {
+//     // Fetch and set monthly data when user is authenticated
+//     if (isAuthenticated) {
+//       const fetchData = async () => {
+//         const user = auth.currentUser;
+//         const userEntriesCollection = collection(db, 'entries', user.uid, 'monthlyData');
+//         const querySnapshot = await getDocs(userEntriesCollection);
+//         const data = querySnapshot.docs.map(doc => doc.data().data);
+//         setMonthlyData(data);
+//       };
+
+//       fetchData();
+//     }
+//   }, [isAuthenticated]);
+
+//   const handleSignIn = async () => {
+//     try {
+//       setError(null);
+//       await signInWithEmailAndPassword(auth, email, password);
+//       setAuthenticated(true);
+//     } catch (err) {
+//       setError(err.message);
+//       console.error(err);
+//     }
+//   };
+
+//   const handleSignInWithGoogle = async () => {
+//     try {
+//       setError(null);
+//       await signInWithPopup(auth, googleProvider);
+//       setAuthenticated(true);
+//     } catch (err) {
+//       setError(err.message);
+//       console.error(err);
+//     }
+//   };
+//   const register = async () => {
+//     try {
+//       // Create a new user in Firebase Authentication
+//       await createUserWithEmailAndPassword(auth, email, password);
+  
+//       // Get the current user
+//       const user = auth.currentUser;
+  
+//       // Create a new document in the "entries" collection with the user's UID
+//       const userEntriesCollection = collection(db, 'entries', user.uid, 'monthlyData');
+  
+//       // Create an object with January and February data
+//       const monthlyData = {
+//         january: 300,
+//         february: 200,
+//       };
+  
+//       // Add the object to Firestore
+//       await addDoc(userEntriesCollection, { data: monthlyData });
+  
+//       setAuthenticated(true);
+//     } catch (err) {
+//       setError(err.message);
+//       console.error(err);
+//     }
+//   };
+  
+//   const handleSignOut = async () => {
+//     try {
+//       setError(null);
+//       await signOut(auth);
+//       setAuthenticated(false);
+//     } catch (err) {
+//       setError(err.message);
+//       console.error(err);
+//     }
+//   };
+
+//   return (
+//     <div>
+//       {isAuthenticated ? (
+//         <div>
+//           <p>Hello, World!</p>
+//           <p>Data: {JSON.stringify(monthlyData)}</p>
+//           <button onClick={handleSignOut}>Sign Out</button>
+//         </div>
+//       ) : (
+//         <div>
+//           <input placeholder="Email.." onChange={(e) => setEmail(e.target.value)} />
+//           <input
+//             type="password"
+//             placeholder="Password.."
+//             onChange={(e) => setPassword(e.target.value)}
+//           />
+//           <button onClick={handleSignIn}>Sign In</button>
+//           <button onClick={register}>register</button>
+//           <button onClick={handleSignInWithGoogle}>Sign In with Google</button>
+//           {error && <p style={{ color: "red" }}>{error}</p>}
+//         </div>
+//       )}
+//     </div>
+//   );
+// };
+
+// export default Auth 

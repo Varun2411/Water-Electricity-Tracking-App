@@ -1,0 +1,55 @@
+/* Auth.css */
+
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: top;
+    height: 100vh;
+    overflow: auto;
+  }
+  
+  .authenticated {
+    /* background-color: #f8f9fa; */
+    background: rgb(240,203,219);
+    background: radial-gradient(circle, rgb(255, 216, 123) 0%, rgb(253, 253, 253) 70%);
+    /* scroll-behavior: smooth; */
+    background-attachment: fixed;
+    /* z-index: 1; Ensure the element is above other content */
+    /* transform: translateZ(0); */
+  }
+  
+  .auth-form-container {
+    max-width: 400px;
+    width: 100%;
+    padding: 20px;
+    border: 1px solid #ced4da;
+    border-radius: 5px;
+    background-color: #fff;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .auth-form-container input {
+    margin-bottom: 10px;
+  }
+  
+  .auth-form-container button {
+    width: 100%;
+    margin-top: 10px;
+  }
+  
+  .auth-form-container button.google-signin {
+    background-color: #4285f4;
+    color: #fff;
+  }
+  
+  .auth-form-container button.google-signin:hover {
+    background-color: #357ae8;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 10px;
+  }
+  
+  /* Add any additional styles based on your design preferences */
+  
